@@ -1,9 +1,16 @@
-"use client"
+"use client";
 
-import {Crossword} from "@guardian/react-crossword";
-import {crossword} from "@/public/example";
+import { useEffect } from "react";
+
+import { Crossword } from "@guardian/react-crossword";
+import { crossword } from "@/public/example";
+
 
 export default function App() {
+    useEffect(() => {
+        window.addEventListener("localStorageSetItem", (e) => validateFullCrossword(e.detail.value));
+    }, [])
+
     return (
         <div>
             <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Mini Crossword</h1>
@@ -12,4 +19,12 @@ export default function App() {
             </div>
         </div>
     );
+
+    function parseCrosswordSolution(crosswordData) {
+
+    }
+
+    function validateFullCrossword(crosswordGrid) {
+        console.log(crosswordGrid);
+    }
 }
