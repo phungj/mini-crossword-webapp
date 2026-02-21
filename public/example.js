@@ -87,4 +87,6 @@ export const crossword = {
   },
   crosswordType: 'quick',
   pdf: 'https://crosswords-static.guim.co.uk/gdn.quick.20250221.pdf',
-}
+};
+
+export const solution = [[]];
