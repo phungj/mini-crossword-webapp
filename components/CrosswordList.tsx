@@ -1,8 +1,8 @@
 import {CrosswordData} from "@/components/App";
 
 type CrosswordListProps = {
-    crosswords: [CrosswordData],
-    loadCrossword: (CrosswordData) => void
+    crosswords: CrosswordData[],
+    loadCrossword: (crossword: CrosswordData) => void
 }
 
 export default function CrosswordList({crosswords, loadCrossword}: CrosswordListProps) {

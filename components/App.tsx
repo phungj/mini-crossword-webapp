@@ -30,7 +30,7 @@ type CrosswordLocalStorageSetItemEvent = {
 }
 
 type AppProps = {
-    crosswords: [CrosswordData]
+    crosswords: CrosswordData[]
 }
 
 export default function App({crosswords}: AppProps) {
@@ -38,16 +38,18 @@ export default function App({crosswords}: AppProps) {
 
     const timerIntervalID = useRef<NodeJS.Timeout | null>(null);
 
-    const currentSolution = useRef<string[][]>(null);
+    const currentSolution = useRef<string[][] | null>(null);
 
     const [mounted, setMounted] = useState<boolean>(false);
 
     const [displayCrosswordList, setDisplayCrosswordList] = useState<boolean>(true);
 
-    const currentCrosswordRef = useRef<CAPICrossword>(null);
-    const [currentCrossword, setCurrentCrossword] = useState<CAPICrossword>(null);
+    const currentCrosswordRef = useRef<CAPICrossword | null>(null);
+    const [currentCrossword, setCurrentCrossword] = useState<CAPICrossword | null>(null);
 
+    const crosswordValidationRef = useRef<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
+
     const [seconds, setSeconds] = useState<number>(0);
 
     const [timerMinutes, timerSeconds] = computeTimeComponents();
@@ -61,6 +63,8 @@ export default function App({crosswords}: AppProps) {
     useEffect(() => setMounted( true), []);
 
     useEffect(() => {currentCrosswordRef.current = currentCrossword}, [currentCrossword]);
+
+    useEffect(() => {crosswordValidationRef.current = crosswordValidation}, [crosswordValidation]);
 
     useEffect(() => {
         if (mounted) {
@@ -77,7 +81,7 @@ export default function App({crosswords}: AppProps) {
     } else {
         return (
             <div>
-                <StartDialog startTimer={startTimer}/>
+                <StartDialog startTimer={startTimer} crossword={currentCrossword as CAPICrossword}/>
                 <CompletionDialog completed={crosswordValidation} timerComponent={timerComponent} startTimer={startTimer} stopTimer={stopTimer}/>
                 <div className="navbar bg-base-100 shadow-sm">
                     <div className="flex-none">
@@ -89,7 +93,7 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword}/>
+                    <Crossword data={currentCrossword as CAPICrossword}/>
                 </div>
             </div>
         );
@@ -105,7 +109,7 @@ export default function App({crosswords}: AppProps) {
     function validateFullCrossword(crosswordGrid: string) {
         const solutionGrid = currentSolution.current;
 
-        if (crosswordValidation !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
+        if (crosswordValidationRef.current !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
             const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
 
             let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
