@@ -8,7 +8,6 @@ export default function StartDialog({startTimer}: StartDialogProps) {
     const startDialogRef = useRef<HTMLDialogElement>(null);
     useEffect(() => startDialogRef.current?.show(), []);
 
-    // TODO: Insert crossword details here
     return (
         <dialog onClose={startTimer} ref={startDialogRef} className="text-center modal">
             <div className='modal-box'>

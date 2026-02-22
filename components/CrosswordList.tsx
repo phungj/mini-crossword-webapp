@@ -6,8 +6,6 @@ type CrosswordListProps = {
 }
 
 export default function CrosswordList({crosswords, loadCrossword}: CrosswordListProps) {
-    // TODO: Populate this with the list of crosswords
-    // TODO: Add input handlers so they load the proper crosswords
     return (
         <div>
             <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Crosswords</h1>
