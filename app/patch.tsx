@@ -2,5 +2,5 @@
 import "../src/patchLocalStorage";
 
 export default function Patch() {
-
+    return null;
 }

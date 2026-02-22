@@ -7,8 +7,11 @@ if (typeof window !== "undefined" && !window.__LOCAL_STORAGE_PATCHED__) {
 
     Storage.prototype.setItem = function (key, value) {
         originalSetItem.call(this, key, value);
-        window.dispatchEvent(
-            new CustomEvent("localStorageSetItem", { detail: { key, value } })
-        );
+
+        if (key.startsWith("crossword")) {
+            window.dispatchEvent(
+                new CustomEvent("crosswordLocalStorageSetItem", { detail: { key, value } })
+            );
+        }
     };
 }

@@ -1,9 +1,9 @@
 import {CROSSWORD_VALIDATION} from "@/components/App";
-import {useEffect, useRef} from "react";
+import React, {useEffect, useRef} from "react";
 
 type CompletionDialogProps = {
     completed: CROSSWORD_VALIDATION,
-    timerComponent,
+    timerComponent: React.JSX.Element,
     startTimer: () => void,
     stopTimer: () => void
 }

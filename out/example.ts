@@ -1,4 +1,6 @@
-export const crossword = {
+import {CAPICrossword} from "@/public/crosswordType";
+
+export const CROSSWORD: CAPICrossword = {
   id: 'crosswords/example/1',
   number: 1,
   name: 'Example crossword No 1',
@@ -89,7 +91,7 @@ export const crossword = {
   pdf: 'https://crosswords-static.guim.co.uk/gdn.quick.20250221.pdf',
 };
 
-export const solution = [
+export const SOLUTION = [
   [
     "Y",
     "E",
@@ -285,4 +287,4 @@ export const solution = [
     "",
     ""
   ]
-];
+] as const;

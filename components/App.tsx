@@ -4,8 +4,8 @@ import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
 import {
-    crossword as exampleCrossword,
-    solution as exampleSolution
+    CROSSWORD as exampleCrossword,
+    SOLUTION as exampleSolution
 } from "@/public/example";
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";
@@ -17,10 +17,19 @@ export enum CROSSWORD_VALIDATION {
 
 }
 
+type CROSSWORD_LOCAL_STORAGE_SET_ITEM_EVENT = {
+    key: string,
+    value: string
+}
+
 export default function App() {
     const COUNTDOWN_ARIA_LABEL = "Counter";
 
-    const timerIntervalID = useRef<NodeJS.Timeout>(null);
+    const timerIntervalID = useRef<NodeJS.Timeout | null>(null);
+
+    const crosswordCompleted = useRef<boolean>(false);
+
+    const [mounted, setMounted] = useState<boolean>(false);
 
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [seconds, setSeconds] = useState<number>(0);
@@ -33,11 +42,22 @@ export default function App() {
         </span>
     );
 
-    useEffect(() => {
-        window.addEventListener("localStorageSetItem", (e) => validateFullCrossword(e.detail.value));
-    }, []);
+    useEffect(() => setMounted( true), []);
 
-    // TODO: address hydration if necessary
+    useEffect(() => {
+        if (mounted) {
+            window.addEventListener("crosswordLocalStorageSetItem", (e) => {
+                const crosswordLocalStorageSetItemEvent = e as CustomEvent<CROSSWORD_LOCAL_STORAGE_SET_ITEM_EVENT>;
+
+                validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value)
+            });
+        }
+    }, [mounted]);
+
+    useEffect(() => {
+        localStorage.removeItem(`crosswords.${exampleCrossword.id}`)
+    }, [])
+
     return (
         <div>
             <StartDialog startTimer={startTimer}/>
@@ -50,23 +70,29 @@ export default function App() {
         </div>
     );
 
-    function validateFullCrossword(crosswordGrid) {
-        crosswordGrid = JSON.parse(crosswordGrid).value;
+    function validateFullCrossword(crosswordGrid: string) {
+        if (!crosswordCompleted.current) {
+            const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
 
-        let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
+            let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
 
-        for (let r = 0; r < crosswordGrid.length; r++) {
-            for (let c = 0; c < crosswordGrid[0].length; c++) {
-                if (crosswordGrid[r][c] === "" && exampleSolution[r][c] !== "") {
-                    setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
-                    return;
-                } else if (crosswordGrid[r][c] !== exampleSolution[r][c]) {
-                    crosswordValidation = CROSSWORD_VALIDATION.INCORRECT;
+            for (let r = 0; r < parsedCrosswordGrid.length; r++) {
+                for (let c = 0; c < parsedCrosswordGrid[0].length; c++) {
+                    if (parsedCrosswordGrid[r][c] === "" && exampleSolution[r][c] !== "") {
+                        setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
+                        return;
+                    } else if (parsedCrosswordGrid[r][c] !== exampleSolution[r][c]) {
+                        crosswordValidation = CROSSWORD_VALIDATION.INCORRECT;
+                    }
                 }
             }
-        }
 
-        setCrosswordValidation(crosswordValidation);
+            if (crosswordValidation === CROSSWORD_VALIDATION.CORRECT) {
+                crosswordCompleted.current = true;
+            }
+
+            setCrosswordValidation(crosswordValidation);
+        }
     }
 
     function computeTimeComponents() {
@@ -83,7 +109,9 @@ export default function App() {
     }
 
     function stopTimer() {
-        clearInterval(timerIntervalID.current);
-        timerIntervalID.current = null;
+        if (timerIntervalID.current) {
+            clearInterval(timerIntervalID.current);
+            timerIntervalID.current = null;
+        }
     }
 }
