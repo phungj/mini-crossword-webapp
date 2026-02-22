@@ -3,12 +3,14 @@
 import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
-import {
-    CROSSWORD as exampleCrossword,
-    SOLUTION as exampleSolution
-} from "@/public/example";
+
+import {CAPICrossword} from "@/data/crosswordType";
+
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";
+import CrosswordList from "@/components/CrosswordList";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHome} from "@fortawesome/free-solid-svg-icons";
 
 export enum CROSSWORD_VALIDATION {
     CORRECT,
@@ -17,19 +19,33 @@ export enum CROSSWORD_VALIDATION {
 
 }
 
-type CROSSWORD_LOCAL_STORAGE_SET_ITEM_EVENT = {
+export type CrosswordData = {
+    crossword: CAPICrossword,
+    solution: string[][]
+}
+
+type CrosswordLocalStorageSetItemEvent = {
     key: string,
     value: string
 }
 
-export default function App() {
+type AppProps = {
+    crosswords: [CrosswordData]
+}
+
+export default function App({crosswords}: AppProps) {
     const COUNTDOWN_ARIA_LABEL = "Counter";
 
     const timerIntervalID = useRef<NodeJS.Timeout | null>(null);
 
-    const crosswordCompleted = useRef<boolean>(false);
+    const currentSolution = useRef<string[][]>(null);
 
     const [mounted, setMounted] = useState<boolean>(false);
+
+    const [displayCrosswordList, setDisplayCrosswordList] = useState<boolean>(true);
+
+    const currentCrosswordRef = useRef<CAPICrossword>(null);
+    const [currentCrossword, setCurrentCrossword] = useState<CAPICrossword>(null);
 
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [seconds, setSeconds] = useState<number>(0);
@@ -44,51 +60,65 @@ export default function App() {
 
     useEffect(() => setMounted( true), []);
 
+    useEffect(() => {currentCrosswordRef.current = currentCrossword}, [currentCrossword]);
+
     useEffect(() => {
         if (mounted) {
             window.addEventListener("crosswordLocalStorageSetItem", (e) => {
-                const crosswordLocalStorageSetItemEvent = e as CustomEvent<CROSSWORD_LOCAL_STORAGE_SET_ITEM_EVENT>;
+                const crosswordLocalStorageSetItemEvent = e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
 
                 validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value)
             });
         }
     }, [mounted]);
 
-    useEffect(() => {
-        localStorage.removeItem(`crosswords.${exampleCrossword.id}`)
-    }, [])
-
-    return (
-        <div>
-            <StartDialog startTimer={startTimer}/>
-            <CompletionDialog completed={crosswordValidation} timerComponent={timerComponent} startTimer={startTimer} stopTimer={stopTimer}/>
-            <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Mini Crossword</h1>
-            <span className="text-2xl ml-5">{timerComponent}</span>
-            <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                <Crossword data={exampleCrossword}/>
+    if (displayCrosswordList) {
+        return <CrosswordList crosswords={crosswords} loadCrossword={loadCrossword}/>
+    } else {
+        return (
+            <div>
+                <StartDialog startTimer={startTimer}/>
+                <CompletionDialog completed={crosswordValidation} timerComponent={timerComponent} startTimer={startTimer} stopTimer={stopTimer}/>
+                <div className="navbar bg-base-100 shadow-sm">
+                    <div className="flex-none">
+                        <FontAwesomeIcon onClick={homeHandler} icon={faHome} className='ml-2 fa-2xl'/>
+                    </div>
+                    <div className="flex-1">
+                        <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Mini Crossword</h1>
+                    </div>
+                </div>
+                <span className="text-2xl ml-5">{timerComponent}</span>
+                <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
+                    <Crossword data={currentCrossword}/>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+
+    function loadCrossword({crossword, solution}: CrosswordData) {
+        currentSolution.current = solution;
+        setCurrentCrossword(crossword);
+        setDisplayCrosswordList(false);
+        localStorage.removeItem(`crosswords.${crossword.id}`);
+    }
 
     function validateFullCrossword(crosswordGrid: string) {
-        if (!crosswordCompleted.current) {
+        const solutionGrid = currentSolution.current;
+
+        if (crosswordValidation !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
             const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
 
             let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
 
             for (let r = 0; r < parsedCrosswordGrid.length; r++) {
                 for (let c = 0; c < parsedCrosswordGrid[0].length; c++) {
-                    if (parsedCrosswordGrid[r][c] === "" && exampleSolution[r][c] !== "") {
+                    if (parsedCrosswordGrid[r][c] === "" && solutionGrid[r][c] !== "") {
                         setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
                         return;
-                    } else if (parsedCrosswordGrid[r][c] !== exampleSolution[r][c]) {
+                    } else if (parsedCrosswordGrid[r][c] !== solutionGrid[r][c]) {
                         crosswordValidation = CROSSWORD_VALIDATION.INCORRECT;
                     }
                 }
-            }
-
-            if (crosswordValidation === CROSSWORD_VALIDATION.CORRECT) {
-                crosswordCompleted.current = true;
             }
 
             setCrosswordValidation(crosswordValidation);
@@ -113,5 +143,16 @@ export default function App() {
             clearInterval(timerIntervalID.current);
             timerIntervalID.current = null;
         }
+    }
+
+    function homeHandler() {
+        currentSolution.current = null;
+        setCurrentCrossword(null);
+        setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
+
+        setSeconds(0);
+        stopTimer();
+
+        setDisplayCrosswordList(true);
     }
 }

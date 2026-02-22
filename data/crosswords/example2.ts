@@ -1,9 +1,9 @@
-import {CAPICrossword} from "@/public/crosswordType";
+import {CAPICrossword} from "@/data/crosswordType";
 
 export const CROSSWORD: CAPICrossword = {
-  id: 'crosswords/example/1',
-  number: 1,
-  name: 'Example crossword No 1',
+  id: 'crosswords/example/2',
+  number: 2,
+  name: 'Example crossword No 2',
   creator: {
     name: 'James',
     webUrl: 'https://www.theguardian.com/profile/maskarade',
