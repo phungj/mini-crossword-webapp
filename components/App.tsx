@@ -93,7 +93,7 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword as CAPICrossword}/>
+                    <Crossword data={currentCrossword as CAPICrossword} textColor={window.matchMedia('(prefers-color-scheme: dark)').matches ? "white" : "black"}/>
                 </div>
             </div>
         );
