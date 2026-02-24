@@ -41,6 +41,7 @@ export default function App({crosswords}: AppProps) {
     const currentSolution = useRef<string[][] | null>(null);
 
     const [mounted, setMounted] = useState<boolean>(false);
+    const [darkMode, setDarkMode] = useState<boolean>(false);
 
     const [displayCrosswordList, setDisplayCrosswordList] = useState<boolean>(true);
 
@@ -71,8 +72,10 @@ export default function App({crosswords}: AppProps) {
             window.addEventListener("crosswordLocalStorageSetItem", (e) => {
                 const crosswordLocalStorageSetItemEvent = e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
 
-                validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value)
+                validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value);
             });
+
+            setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
         }
     }, [mounted]);
 
@@ -93,7 +96,7 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword as CAPICrossword} textColor={window.matchMedia('(prefers-color-scheme: dark)').matches ? "white" : "black"}/>
+                    <Crossword data={currentCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"}/>
                 </div>
             </div>
         );
