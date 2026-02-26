@@ -5,7 +5,7 @@ export const CROSSWORD: CAPICrossword = {
   number: 1,
   name: 'A Friend\'s 5x5 Mini Crossword',
   creator: {
-    name: 'James',
+    name: 'James, a friend of mine',
     webUrl: '',
   },
   date: 1714453200000,

@@ -5,7 +5,7 @@ export const CROSSWORD: CAPICrossword = {
   number: 1,
   name: 'Example crossword No 1',
   creator: {
-    name: 'James',
+    name: 'James, from The Guardian',
     webUrl: 'https://www.theguardian.com/profile/maskarade',
   },
   date: 1740149419743,
