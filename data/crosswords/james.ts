@@ -126,7 +126,7 @@ export const CROSSWORD: CAPICrossword = {
       clue: 'Nickname of massively influential American entertainer of the 1990s and 2000s',
       direction: 'down',
       length: 3,
-      group: ['5-down'],
+      group: ['6-down'],
       position: {x: 0, y: 2},
       separatorLocations: {},
       solution: "JLO"

@@ -7,7 +7,7 @@ type CrosswordListProps = {
 
 export default function CrosswordList({crosswords, loadCrossword}: CrosswordListProps) {
     return (
-        <div>
+        <div className="min-h-screen">
             <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Crosswords</h1>
             <ol className="list grid">
                 {crosswords.map(crossword => <li onClick={() => loadCrossword(crossword)} key={crossword.crossword.id} className="list-row flex">{crossword.crossword.name}</li>)}
