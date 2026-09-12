@@ -1,6 +1,6 @@
 import type {CrosswordProps} from "@guardian/react-crossword";
 
-type CAPICrossword = CrosswordProps["data"];
+export type CAPICrossword = CrosswordProps["data"];
 
 type CrosswordSolution = {
     crossword: CAPICrossword;

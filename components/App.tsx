@@ -33,15 +33,13 @@ export default function App({crosswords}: AppProps) {
 
     const timerIntervalID = useRef<NodeJS.Timeout | null>(null);
 
-    const currentSolution = useRef<string[][] | null>(null);
-
     const [mounted, setMounted] = useState<boolean>(false);
     const [darkMode, setDarkMode] = useState<boolean>(false);
 
     const [displayCrosswordList, setDisplayCrosswordList] = useState<boolean>(true);
 
-    const currentCrosswordRef = useRef<CAPICrossword | null>(null);
-    const [currentCrossword, setCurrentCrossword] = useState<CAPICrossword | null>(null);
+    const currentCrosswordRef = useRef<CrosswordData | null>(null);
+    const [currentCrossword, setCurrentCrossword] = useState<CrosswordData | null>(null);
 
     const crosswordValidationRef = useRef<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
@@ -79,7 +77,7 @@ export default function App({crosswords}: AppProps) {
     } else {
         return (
             <div>
-                <StartDialog startTimer={startTimer} crossword={currentCrossword as CAPICrossword}/>
+                <StartDialog startTimer={startTimer} crossword={currentCrossword?.solutions[0].crossword as CAPICrossword}/>
                 <CompletionDialog completed={crosswordValidation} timerComponent={timerComponent} startTimer={startTimer} stopTimer={stopTimer}/>
                 <div className="navbar bg-base-100 shadow-sm">
                     <div className="flex-none">
@@ -91,21 +89,20 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
+                    <Crossword data={currentCrossword?.solutions[0].crossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
                 </div>
             </div>
         );
     }
 
-    function loadCrossword({crossword, solution}: CrosswordData) {
-        currentSolution.current = solution;
+    function loadCrossword(crossword: CrosswordData) {
         setCurrentCrossword(crossword);
         setDisplayCrosswordList(false);
-        localStorage.removeItem(`crosswords.${crossword.id}`);
+        localStorage.removeItem(`crosswords.${crossword.solutions[0].crossword.id}`);
     }
 
     function validateFullCrossword(crosswordGrid: string) {
-        const solutionGrid = currentSolution.current;
+        const solutionGrid = currentCrosswordRef.current?.solutions[0].solution;
 
         if (crosswordValidationRef.current !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
             const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
@@ -141,14 +138,15 @@ export default function App({crosswords}: AppProps) {
     }
 
     function stopTimer() {
-        if (timerIntervalID.current) {
-            clearInterval(timerIntervalID.current);
+        const currentTimerIntervalID = timerIntervalID.current;
+
+        if (currentTimerIntervalID !== null) {
+            clearInterval(currentTimerIntervalID);
             timerIntervalID.current = null;
         }
     }
 
     function homeHandler() {
-        currentSolution.current = null;
         setCurrentCrossword(null);
         setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
 

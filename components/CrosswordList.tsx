@@ -1,4 +1,4 @@
-import {CrosswordData} from "@/components/App";
+import {CrosswordData} from "@/data/crosswords";
 
 type CrosswordListProps = {
     crosswords: CrosswordData[],
@@ -8,9 +8,23 @@ type CrosswordListProps = {
 export default function CrosswordList({crosswords, loadCrossword}: CrosswordListProps) {
     return (
         <div className="min-h-screen">
-            <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">Crosswords</h1>
+            <h1 className="font-title text-heading text-2xl font-bold text-center mt-2">
+                Crosswords
+            </h1>
             <ol className="list grid">
-                {crosswords.map(crossword => <li onClick={() => loadCrossword(crossword)} key={crossword.crossword.id} className="list-row flex">{crossword.crossword.name}</li>)}
+                {crosswords.map(crossword => {
+                    const crosswordData = crossword.solutions[0].crossword;
+
+                    return (
+                        <li
+                            onClick={() => loadCrossword(crossword)}
+                            key={crosswordData.id}
+                            className="list-row flex"
+                        >
+                            {crosswordData.name}
+                        </li>
+                    );
+                })}
             </ol>
         </div>
     )
