@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
 
-import {CAPICrossword} from "@/data/crosswordType";
+import {CAPICrossword, CrosswordData} from "@/data/crosswordType";
 
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";
@@ -17,11 +17,6 @@ export enum CROSSWORD_VALIDATION {
     INCORRECT,
     INCOMPLETE
 
-}
-
-export type CrosswordData = {
-    crossword: CAPICrossword,
-    solution: string[][]
 }
 
 type CrosswordLocalStorageSetItemEvent = {
