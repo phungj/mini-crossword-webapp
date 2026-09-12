@@ -4,7 +4,13 @@ import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
 
-import {CAPICrossword} from "@/data/crosswordType";
+import {
+    CAPICrossword,
+    CrosswordData,
+    hasValidSolution,
+    getCompatibleSolutions,
+    isCrosswordComplete
+} from "@/data/crosswords";
 
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";
@@ -17,11 +23,6 @@ export enum CROSSWORD_VALIDATION {
     INCORRECT,
     INCOMPLETE
 
-}
-
-export type CrosswordData = {
-    crossword: CAPICrossword,
-    solution: string[][]
 }
 
 type CrosswordLocalStorageSetItemEvent = {
@@ -38,18 +39,19 @@ export default function App({crosswords}: AppProps) {
 
     const timerIntervalID = useRef<NodeJS.Timeout | null>(null);
 
-    const currentSolution = useRef<string[][] | null>(null);
-
     const [mounted, setMounted] = useState<boolean>(false);
     const [darkMode, setDarkMode] = useState<boolean>(false);
 
     const [displayCrosswordList, setDisplayCrosswordList] = useState<boolean>(true);
 
-    const currentCrosswordRef = useRef<CAPICrossword | null>(null);
-    const [currentCrossword, setCurrentCrossword] = useState<CAPICrossword | null>(null);
+    const currentCrosswordRef = useRef<CrosswordData | null>(null);
+    const [currentCrossword, setCurrentCrossword] = useState<CrosswordData | null>(null);
 
     const crosswordValidationRef = useRef<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
+
+    const [guardianCrossword, setGuardianCrossword] =
+        useState<CAPICrossword | null>(null);
 
     const [seconds, setSeconds] = useState<number>(0);
 
@@ -68,15 +70,32 @@ export default function App({crosswords}: AppProps) {
     useEffect(() => {crosswordValidationRef.current = crosswordValidation}, [crosswordValidation]);
 
     useEffect(() => {
-        if (mounted) {
-            window.addEventListener("crosswordLocalStorageSetItem", (e) => {
-                const crosswordLocalStorageSetItemEvent = e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
-
-                validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value);
-            });
-
-            setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (!mounted) {
+            return;
         }
+
+        function handleLocalStorageSetItem(e: Event) {
+            const event =
+                e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
+
+            validateFullCrossword(event.detail.value);
+        }
+
+        window.addEventListener(
+            "crosswordLocalStorageSetItem",
+            handleLocalStorageSetItem
+        );
+
+        setDarkMode(
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+        );
+
+        return () => {
+            window.removeEventListener(
+                "crosswordLocalStorageSetItem",
+                handleLocalStorageSetItem
+            );
+        };
     }, [mounted]);
 
     if (displayCrosswordList) {
@@ -84,7 +103,7 @@ export default function App({crosswords}: AppProps) {
     } else {
         return (
             <div>
-                <StartDialog startTimer={startTimer} crossword={currentCrossword as CAPICrossword}/>
+                <StartDialog startTimer={startTimer} crossword={currentCrossword?.solutions[0].crossword as CAPICrossword}/>
                 <CompletionDialog completed={crosswordValidation} timerComponent={timerComponent} startTimer={startTimer} stopTimer={stopTimer}/>
                 <div className="navbar bg-base-100 shadow-sm">
                     <div className="flex-none">
@@ -96,39 +115,56 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
+                    <Crossword data={guardianCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
                 </div>
             </div>
         );
     }
 
-    function loadCrossword({crossword, solution}: CrosswordData) {
-        currentSolution.current = solution;
+    function loadCrossword(crossword: CrosswordData) {
+        const solution = crossword.solutions[0];
+
         setCurrentCrossword(crossword);
+        setGuardianCrossword(solution.crossword);
+
         setDisplayCrosswordList(false);
-        localStorage.removeItem(`crosswords.${crossword.id}`);
+        localStorage.removeItem(`crosswords.${solution.crossword.id}`);
     }
 
     function validateFullCrossword(crosswordGrid: string) {
-        const solutionGrid = currentSolution.current;
+        const crossword = currentCrosswordRef.current;
 
-        if (crosswordValidationRef.current !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
-            const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
+        if (
+            crosswordValidationRef.current === CROSSWORD_VALIDATION.CORRECT ||
+            !crossword
+        ) {
+            return;
+        }
 
-            let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
+        const progress = JSON.parse(crosswordGrid).value as string[][];
 
-            for (let r = 0; r < parsedCrosswordGrid.length; r++) {
-                for (let c = 0; c < parsedCrosswordGrid[0].length; c++) {
-                    if (parsedCrosswordGrid[r][c] === "" && solutionGrid[r][c] !== "") {
-                        setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
-                        return;
-                    } else if (parsedCrosswordGrid[r][c] !== solutionGrid[r][c]) {
-                        crosswordValidation = CROSSWORD_VALIDATION.INCORRECT;
-                    }
-                }
-            }
+        const compatibleSolutions = getCompatibleSolutions(
+            crossword,
+            progress
+        );
 
-            setCrosswordValidation(crosswordValidation);
+        if (compatibleSolutions.length > 0) {
+            const solution = compatibleSolutions[0];
+
+            setGuardianCrossword(solution.crossword);
+        }
+
+        const solution = crossword.solutions[0].solution;
+
+        if (!isCrosswordComplete(progress, solution)) {
+            setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
+            return;
+        }
+
+        if (hasValidSolution(progress, crossword)) {
+            setCrosswordValidation(CROSSWORD_VALIDATION.CORRECT);
+        } else {
+            setCrosswordValidation(CROSSWORD_VALIDATION.INCORRECT);
         }
     }
 
@@ -146,14 +182,15 @@ export default function App({crosswords}: AppProps) {
     }
 
     function stopTimer() {
-        if (timerIntervalID.current) {
-            clearInterval(timerIntervalID.current);
+        const currentTimerIntervalID = timerIntervalID.current;
+
+        if (currentTimerIntervalID !== null) {
+            clearInterval(currentTimerIntervalID);
             timerIntervalID.current = null;
         }
     }
 
     function homeHandler() {
-        currentSolution.current = null;
         setCurrentCrossword(null);
         setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
 

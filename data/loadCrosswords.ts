@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {CrosswordData} from "@/components/App";
+import {CrosswordData} from "@/data/crosswords";
 
 export async function loadCrosswords(): Promise<CrosswordData[]> {
     const files = fs.readdirSync(path.join(process.cwd(), "data/crosswords"));
@@ -8,9 +8,6 @@ export async function loadCrosswords(): Promise<CrosswordData[]> {
     return files.map(file => {
         const crossword = require(`./crosswords/${file}`);
 
-        return {
-            crossword: crossword.CROSSWORD,
-            solution: crossword.SOLUTION
-        } as CrosswordData
+        return crossword.CROSSWORD_DATA as CrosswordData;
     });
 }
