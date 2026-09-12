@@ -53,9 +53,6 @@ export default function App({crosswords}: AppProps) {
     const [guardianCrossword, setGuardianCrossword] =
         useState<CAPICrossword | null>(null);
 
-    const [guardianSolutionID, setGuardianSolutionID] =
-        useState<string>("");
-
     const [seconds, setSeconds] = useState<number>(0);
 
     const [timerMinutes, timerSeconds] = computeTimeComponents();
@@ -118,7 +115,7 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword key={guardianSolutionID} data={guardianCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
+                    <Crossword data={guardianCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
                 </div>
             </div>
         );
@@ -129,7 +126,6 @@ export default function App({crosswords}: AppProps) {
 
         setCurrentCrossword(crossword);
         setGuardianCrossword(solution.crossword);
-        setGuardianSolutionID(solution.solutionID);
 
         setDisplayCrosswordList(false);
         localStorage.removeItem(`crosswords.${solution.crossword.id}`);
@@ -156,7 +152,6 @@ export default function App({crosswords}: AppProps) {
             const solution = compatibleSolutions[0];
 
             setGuardianCrossword(solution.crossword);
-            setGuardianSolutionID(solution.solutionID);
         }
 
         const solution = crossword.solutions[0].solution;

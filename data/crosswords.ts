@@ -3,7 +3,6 @@ import type {CrosswordProps} from "@guardian/react-crossword";
 export type CAPICrossword = CrosswordProps["data"];
 
 type CrosswordSolution = {
-    solutionID: string
     crossword: CAPICrossword;
     solution: string[][];
 };
