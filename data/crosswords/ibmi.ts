@@ -3,6 +3,7 @@ import {CrosswordData} from "@/data/crosswords";
 export const CROSSWORD_DATA: CrosswordData = {
   solutions: [
     {
+      solutionID: 'crosswords/ibm/1-1',
       crossword: {
         id: 'crosswords/ibm/1',
         number: 1,

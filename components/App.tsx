@@ -4,7 +4,13 @@ import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
 
-import {CAPICrossword, CrosswordData} from "@/data/crosswords";
+import {
+    CAPICrossword,
+    CrosswordData,
+    hasValidSolution,
+    getCompatibleSolutions,
+    isCrosswordComplete
+} from "@/data/crosswords";
 
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";
@@ -44,6 +50,12 @@ export default function App({crosswords}: AppProps) {
     const crosswordValidationRef = useRef<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
     const [crosswordValidation, setCrosswordValidation] = useState<CROSSWORD_VALIDATION>(CROSSWORD_VALIDATION.INCOMPLETE);
 
+    const [guardianCrossword, setGuardianCrossword] =
+        useState<CAPICrossword | null>(null);
+
+    const [guardianSolutionID, setGuardianSolutionID] =
+        useState<string>("");
+
     const [seconds, setSeconds] = useState<number>(0);
 
     const [timerMinutes, timerSeconds] = computeTimeComponents();
@@ -61,15 +73,32 @@ export default function App({crosswords}: AppProps) {
     useEffect(() => {crosswordValidationRef.current = crosswordValidation}, [crosswordValidation]);
 
     useEffect(() => {
-        if (mounted) {
-            window.addEventListener("crosswordLocalStorageSetItem", (e) => {
-                const crosswordLocalStorageSetItemEvent = e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
-
-                validateFullCrossword(crosswordLocalStorageSetItemEvent.detail.value);
-            });
-
-            setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (!mounted) {
+            return;
         }
+
+        function handleLocalStorageSetItem(e: Event) {
+            const event =
+                e as CustomEvent<CrosswordLocalStorageSetItemEvent>;
+
+            validateFullCrossword(event.detail.value);
+        }
+
+        window.addEventListener(
+            "crosswordLocalStorageSetItem",
+            handleLocalStorageSetItem
+        );
+
+        setDarkMode(
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+        );
+
+        return () => {
+            window.removeEventListener(
+                "crosswordLocalStorageSetItem",
+                handleLocalStorageSetItem
+            );
+        };
     }, [mounted]);
 
     if (displayCrosswordList) {
@@ -89,38 +118,58 @@ export default function App({crosswords}: AppProps) {
                 </div>
                 <span className="text-2xl ml-5">{timerComponent}</span>
                 <div className="mt-2 ml-5 mr-5 flex items-center justify-center h-full w-full">
-                    <Crossword data={currentCrossword?.solutions[0].crossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
+                    <Crossword key={guardianSolutionID} data={guardianCrossword as CAPICrossword} textColor={darkMode ? "white" : "black"} connectedBackgroundColor={darkMode ? "gray" : "yellow"} anagramHelperBackgroundColor={darkMode ? "black" : "white"}/>
                 </div>
             </div>
         );
     }
 
     function loadCrossword(crossword: CrosswordData) {
+        const solution = crossword.solutions[0];
+
         setCurrentCrossword(crossword);
+        setGuardianCrossword(solution.crossword);
+        setGuardianSolutionID(solution.solutionID);
+
         setDisplayCrosswordList(false);
-        localStorage.removeItem(`crosswords.${crossword.solutions[0].crossword.id}`);
+        localStorage.removeItem(`crosswords.${solution.crossword.id}`);
     }
 
     function validateFullCrossword(crosswordGrid: string) {
-        const solutionGrid = currentCrosswordRef.current?.solutions[0].solution;
+        const crossword = currentCrosswordRef.current;
 
-        if (crosswordValidationRef.current !== CROSSWORD_VALIDATION.CORRECT && currentCrosswordRef.current && solutionGrid) {
-            const parsedCrosswordGrid = JSON.parse(crosswordGrid).value;
+        if (
+            crosswordValidationRef.current === CROSSWORD_VALIDATION.CORRECT ||
+            !crossword
+        ) {
+            return;
+        }
 
-            let crosswordValidation = CROSSWORD_VALIDATION.CORRECT;
+        const progress = JSON.parse(crosswordGrid).value as string[][];
 
-            for (let r = 0; r < parsedCrosswordGrid.length; r++) {
-                for (let c = 0; c < parsedCrosswordGrid[0].length; c++) {
-                    if (parsedCrosswordGrid[r][c] === "" && solutionGrid[r][c] !== "") {
-                        setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
-                        return;
-                    } else if (parsedCrosswordGrid[r][c] !== solutionGrid[r][c]) {
-                        crosswordValidation = CROSSWORD_VALIDATION.INCORRECT;
-                    }
-                }
-            }
+        const compatibleSolutions = getCompatibleSolutions(
+            crossword,
+            progress
+        );
 
-            setCrosswordValidation(crosswordValidation);
+        if (compatibleSolutions.length > 0) {
+            const solution = compatibleSolutions[0];
+
+            setGuardianCrossword(solution.crossword);
+            setGuardianSolutionID(solution.solutionID);
+        }
+
+        const solution = crossword.solutions[0].solution;
+
+        if (!isCrosswordComplete(progress, solution)) {
+            setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
+            return;
+        }
+
+        if (hasValidSolution(progress, crossword)) {
+            setCrosswordValidation(CROSSWORD_VALIDATION.CORRECT);
+        } else {
+            setCrosswordValidation(CROSSWORD_VALIDATION.INCORRECT);
         }
     }
 

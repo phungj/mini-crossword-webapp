@@ -3,6 +3,7 @@ import {CAPICrossword, CrosswordData} from "@/data/crosswords";
 export const CROSSWORD_DATA: CrosswordData = {
   solutions: [
     {
+      solutionID: 'crosswords/ibm/2-1',
       crossword: {
         id: 'crosswords/ibm/2',
         number: 1,
