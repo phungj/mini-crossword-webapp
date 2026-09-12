@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 
 import {Crossword} from "@guardian/react-crossword";
 
-import {CAPICrossword, CrosswordData} from "@/data/crosswordType";
+import {CAPICrossword, CrosswordData} from "@/data/crosswords";
 
 import CompletionDialog from "@/components/CompletionDialog";
 import StartDialog from "@/components/StartDialog";

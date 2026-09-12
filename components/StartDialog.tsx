@@ -1,5 +1,5 @@
 import {useEffect, useRef} from "react";
-import {CAPICrossword} from "@/data/crosswordType";
+import {CAPICrossword} from "@/data/crosswords";
 
 type StartDialogProps = {
     startTimer: () => void,

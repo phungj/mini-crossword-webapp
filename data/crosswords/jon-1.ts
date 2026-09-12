@@ -1,4 +1,4 @@
-import {CAPICrossword} from "@/data/crosswordType";
+import {CAPICrossword} from "@/data/crosswords";
 
 export const CROSSWORD: CAPICrossword = {
   id: 'crosswords/jon/1',
