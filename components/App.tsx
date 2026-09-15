@@ -8,8 +8,7 @@ import {
     CAPICrossword,
     CrosswordData,
     hasValidSolution,
-    getCompatibleSolutions,
-    isCrosswordComplete
+    isCrosswordComplete, getClosestSolution
 } from "@/data/crosswords";
 
 import CompletionDialog from "@/components/CompletionDialog";
@@ -143,20 +142,14 @@ export default function App({crosswords}: AppProps) {
 
         const progress = JSON.parse(crosswordGrid).value as string[][];
 
-        const compatibleSolutions = getCompatibleSolutions(
+        const closestSolution = getClosestSolution(
             crossword,
             progress
         );
 
-        if (compatibleSolutions.length > 0) {
-            const solution = compatibleSolutions[0];
+        setGuardianCrossword(closestSolution.crossword);
 
-            setGuardianCrossword(solution.crossword);
-        }
-
-        const solution = crossword.solutions[0].solution;
-
-        if (!isCrosswordComplete(progress, solution)) {
+        if (!isCrosswordComplete(progress, closestSolution.solution)) {
             setCrosswordValidation(CROSSWORD_VALIDATION.INCOMPLETE);
             return;
         }
