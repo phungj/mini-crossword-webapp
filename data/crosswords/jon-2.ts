@@ -5,7 +5,7 @@ export const CROSSWORD_DATA: CrosswordData = {
     {
       crossword: {
         id: 'crosswords/jon/2',
-        number: 1,
+        number: 2,
         name: 'Jon\'s 5x5 Mini Crossword 2',
         creator: {
           name: 'Jon Phung',
