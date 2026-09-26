@@ -126,7 +126,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         id: '9-across',
                         number: 9,
                         humanNumber: '9',
-                        clue: 'Twinkle twinkle',
+                        clue: 'Covering the Hollywood Walk of Fame',
                         direction: 'across',
                         length: 5,
                         group: ['9-across'],
