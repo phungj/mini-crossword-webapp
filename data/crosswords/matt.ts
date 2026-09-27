@@ -6,7 +6,7 @@ export const CROSSWORD_DATA: CrosswordData = {
             crossword: {
                 id: 'crosswords/matt/1',
                 number: 1,
-                name: 'Matt\'s Mini Crossword 1',
+                name: 'Matt\'s Mini Crossword',
                 creator: {
                     name: 'Matt P.',
                     webUrl: 'https://github.com/the10thWiz',
@@ -18,13 +18,13 @@ export const CROSSWORD_DATA: CrosswordData = {
                         id: '1-across',
                         number: 1,
                         humanNumber: '1',
-                        clue: "Food option at IBM )icnic",
+                        clue: "Food option at IBM Picnic",
                         direction: 'across',
                         length: 4,
                         group: ['1-across'],
                         position: { x: 2, y: 0 },
                         separatorLocations: {},
-                        solution: '',
+                        solution: 'BRAT',
                     },
                     {
                         id: '5-across',
@@ -36,7 +36,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['5-across'],
                         position: { x: 1, y: 1 },
                         separatorLocations: {},
-                        solution: '',
+                        solution: 'HOUSE',
                     },
                     {
                         id: '6-across',
@@ -48,7 +48,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['6-across'],
                         position: {x: 0, y: 2},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "MOONING"
                     },
                     {
                         id: '8-across',
@@ -60,7 +60,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['8-across'],
                         position: {x: 0, y: 3},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "BRG"
                     },
                     {
                         id: '9-across',
@@ -72,7 +72,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['9-across'],
                         position: {x: 4, y: 3},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "NAP"
                     },
                     {
                         id: '10-across',
@@ -84,7 +84,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['8-across'],
                         position: {x: 0, y: 4},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "ASIMINA"
                     },
                     {
                         id: '12-across',
@@ -96,7 +96,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['12-across'],
                         position: {x: 1, y: 5},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "LEANT"
                     },
                     {
                         id: '13-across',
@@ -108,7 +108,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['13-across'],
                         position: {x: 1, y: 6},
                         separatorLocations: {},
-                        solution: ""
+                        solution: "EDGE"
                     },
                     {
                         id: '1-down',
@@ -120,80 +120,92 @@ export const CROSSWORD_DATA: CrosswordData = {
                         group: ['1-down'],
                         position: { x: 2, y: 0 },
                         separatorLocations: {},
-                        solution: 'HORSE',
+                        solution: 'BOOGIED',
                     },
                     {
                         id: '2-down',
                         number: 2,
                         humanNumber: '2',
-                        clue: 'You can bet on it!',
+                        clue: "What Ryan's code always does on the first try",
                         direction: "down",
-                        length: 5,
+                        length: 3,
                         group: ['2-down'],
-                        position: {x: 12, y: 2},
+                        position: {x: 3, y: 0},
                         separatorLocations: {},
-                        solution: "HORSE"
+                        solution: "RUN"
                     },
                     {
                         id: '3-down',
                         number: 3,
                         humanNumber: '3',
-                        clue: "Half of a centaur",
+                        clue: "Stupid and obstinant",
                         direction: "down",
-                        length: 5,
+                        length: 7,
                         group: ['3-down'],
-                        position: {x: 10, y: 4},
+                        position: {x: 4, y: 0},
                         separatorLocations: {},
-                        solution: "HORSE"
+                        solution: "ASININE"
                     },
                     {
                         id: '4-down',
                         number: 4,
                         humanNumber: '4',
-                        clue: 'Neigh-sayer',
+                        clue: 'IBM to IRG',
                         direction: "down",
-                        length: 5,
+                        length: 6,
                         group: ['4-down'],
-                        position: {x: 8, y: 6},
+                        position: {x: 5, y: 0},
                         separatorLocations: {},
-                        solution: "HORSE"
+                        solution: "TENANT"
                     },
                     {
                         id: '5-down',
                         number: 5,
                         humanNumber: '5',
-                        clue: "Cowboy's companion",
+                        clue: "Hardest daily game",
                         direction: 'down',
-                        length: 5,
+                        length: 6,
                         group: ['5-down'],
-                        position: { x: 6, y: 8 },
+                        position: { x: 1, y: 1 },
                         separatorLocations: {},
-                        solution: 'HORSE',
+                        solution: 'HORSLE',
                     },
                     {
                         id: '6-down',
                         number: 6,
                         humanNumber: '6',
-                        clue: "Gymnastics apparatus",
+                        clue: "Executive's degree, often",
                         direction: 'down',
-                        length: 5,
+                        length: 3,
                         group: ['6-down'],
-                        position: {x: 4, y: 10},
+                        position: {x: 0, y: 2},
                         separatorLocations: {},
-                        solution: "HORSE"
+                        solution: "MBA"
                     },
                     {
                         id: '7-down',
                         number: 7,
                         humanNumber: '7',
-                        clue: 'Derby entrant',
+                        clue: 'Student score',
                         direction: 'down',
-                        length: 5,
+                        length: 3,
                         group: ['7-down'],
-                        position: {x: 2, y: 12},
+                        position: {x: 6, y: 2},
                         separatorLocations: {},
-                        solution: 'HORSE'
+                        solution: 'GPA'
                     },
+                    {
+                        id: '11-down',
+                        number: 11,
+                        humanNumber: '11',
+                        clue: 'Magazine, briefly, or a gun part',
+                        direction: 'down',
+                        length: 3,
+                        group: ['11-down'],
+                        position: {x: 3, y: 4},
+                        separatorLocations: {},
+                        solution: 'MAG'
+                    }
                 ],
                 solutionAvailable: true,
                 dateSolutionAvailable: 1790053200000,
@@ -204,7 +216,71 @@ export const CROSSWORD_DATA: CrosswordData = {
                 crosswordType: 'mini',
                 pdf: 'https://crosswords-static.guim.co.uk/gdn.quick.20250221.pdf',
             },
-            solution: [[]]
+            solution: [
+                [
+                    "",
+                    "",
+                    "M",
+                    "B",
+                    "A",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "H",
+                    "O",
+                    "R",
+                    "S",
+                    "L",
+                    "E"
+                ],
+                [
+                    "B",
+                    "O",
+                    "O",
+                    "G",
+                    "I",
+                    "E",
+                    "D"
+                ],
+                [
+                    "R",
+                    "U",
+                    "N",
+                    "",
+                    "M",
+                    "A",
+                    "G"
+                ],
+                [
+                    "A",
+                    "S",
+                    "I",
+                    "N",
+                    "I",
+                    "N",
+                    "E"
+                ],
+                [
+                    "T",
+                    "E",
+                    "N",
+                    "A",
+                    "N",
+                    "T",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "G",
+                    "P",
+                    "A",
+                    "",
+                    ""
+                ]
+            ]
         }
     ]
 };
