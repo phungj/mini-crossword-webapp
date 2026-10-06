@@ -26,9 +26,13 @@ type Clue = {
 // TAB
 //
 const GRID = `
-C##
-A##
-TAB
+#####H####
+#####OCTAL
+MYFINGERS#
+#####BLEAK
+#####OLAPA
+#####M#T#N
+#####B####
 `;
 
 // Put clues here using the crossword number.
@@ -37,15 +41,20 @@ TAB
 // correspond to which entries.
 //
 const CLUES: Record<string, string> = {
-    '1-across': '',
-    '1-down': '',
-    '2-down': '',
-    '3-across': '',
+    '1-down': 'A 3740 disaster',
+    '2-across': 'The numerical system used to write every number within this puzzle\'s clues',
+    '3-down': 'Estimated to be around 664,435,325,760,000 of these in the human body (Singular)',
+    '4-down': 'Trick or',
+    '5-down': 'When Jon probably wanted these puzzles to be completed',
+    '6-across': 'Something one would declare to bite off whole hog mode (2 words)',
+    '7-across': 'How the chance of getting our share of GDP is looking this year',
+    '8-down': 'The three-letter abbreviation for the 42nd state',
+    '9-across': 'The goddess of the moon in Maasai mythology (practiced in Kenya and Tanzania) and a genus of moths found throughout Africa'
 };
 
-const TITLE = '';
+const TITLE = 'Emily\'s Mini Crossword';
 const CREATOR_NAME = 'Emily M.';
-const CREATOR_URL = '';
+const CREATOR_URL = 'https://emily-mcnett.github.io';
 const CROSSWORD_ID = 'crosswords/emily/1';
 
 //
@@ -288,21 +297,21 @@ function generate() {
             webUrl: CREATOR_URL,
         },
 
-        date: 0,
-        webPublicationDate: 0,
+        date: 1790830800000,
+        webPublicationDate: 1790830800000,
 
         entries: crosswordEntries,
 
         solutionAvailable: true,
-        dateSolutionAvailable: 0,
+        dateSolutionAvailable: 1790830800000,
 
         dimensions: {
             cols: grid.length,
             rows: grid[0].length,
         },
 
-        crosswordType: 'quick',
-        pdf: '',
+        crosswordType: 'mini',
+        pdf: 'https://crosswords-static.guim.co.uk/gdn.quick.20250221.pdf',
     };
 
     const result = {
