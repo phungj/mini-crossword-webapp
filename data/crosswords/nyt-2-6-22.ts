@@ -69,7 +69,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         clue: 'Let out, in a way',
                         direction: "down",
                         length: 6,
-                        group: ['71-down'],
+                        group: ['55-down'],
                         position: {x: 7, y: 1},
                         separatorLocations: {},
                         solution: 'LEASED'
@@ -234,7 +234,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         clue: 'Let out, in a way',
                         direction: "down",
                         length: 6,
-                        group: ['71-down'],
+                        group: ['55-down'],
                         position: {x: 7, y: 1},
                         separatorLocations: {},
                         solution: 'LEAKED'
