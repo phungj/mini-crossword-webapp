@@ -4,139 +4,139 @@ export const CROSSWORD_DATA: CrosswordData = {
     solutions: [
         {
             crossword: {
-                id: 'crosswords/boston-globe/2',
-                number: 2,
-                name: 'Boston Globe 2/28/26 Mini Crossword',
+                id: 'crosswords/jon/3',
+                number: 3,
+                name: 'Jon\'s Mini Crossword 3',
                 creator: {
-                    name: 'Sowmya Ramkumar',
-                    webUrl: 'https://www.bostonglobe.com/games/mini-crossword/',
+                    name: 'Jon Phung',
+                    webUrl: 'https://github.com/phungj',
                 },
-                date: 1772258400000,
-                webPublicationDate: 1772258400000,
+                date: 1789189200000,
+                webPublicationDate: 1789189200000,
                 entries: [
                     {
                         id: '1-across',
                         number: 1,
                         humanNumber: '1',
-                        clue: 'Musician\'s booking',
+                        clue: "Fruit slammed on Ryan's driveway",
                         direction: 'across',
-                        length: 3,
+                        length: 4,
                         group: ['1-across'],
-                        position: { x: 1, y: 0 },
+                        position: { x: 0, y: 0 },
                         separatorLocations: {},
-                        solution: 'GIG',
+                        solution: 'LIME',
                     },
                     {
-                        id: '4-across',
-                        number: 4,
-                        humanNumber: '4',
-                        clue: 'Make void',
+                        id: '5-across',
+                        number: 5,
+                        humanNumber: '5',
+                        clue: 'Perfect',
                         direction: 'across',
                         length: 5,
-                        group: ['4-across'],
-                        position: {x: 0, y: 1},
+                        group: ['5-across'],
+                        position: { x: 0, y: 1 },
                         separatorLocations: {},
-                        solution: 'ANNUL'
-                    },
-                    {
-                        id: '6-across',
-                        number: 6,
-                        humanNumber: '6',
-                        clue: '___ Drive (Beverly Hills street)',
-                        direction: 'across',
-                        length: 5,
-                        group: ['6-across'],
-                        position: { x: 0, y: 2 },
-                        separatorLocations: {},
-                        solution: 'RODEO',
+                        solution: 'IDEAL',
                     },
                     {
                         id: '7-across',
                         number: 7,
                         humanNumber: '7',
-                        clue: 'Out of kilter',
+                        clue: 'Same, or a Pokémon that can mimic other things',
                         direction: 'across',
                         length: 5,
                         group: ['7-across'],
-                        position: {x: 0, y: 3},
+                        position: {x: 0, y: 2},
                         separatorLocations: {},
-                        solution: 'AMISS'
+                        solution: 'DITTO'
                     },
                     {
                         id: '8-across',
                         number: 8,
                         humanNumber: '8',
-                        clue: 'Beauty and the ___',
+                        clue: 'Tender spots',
                         direction: 'across',
                         length: 5,
                         group: ['8-across'],
-                        position: {x: 0, y: 4},
+                        position: {x: 0, y: 3},
                         separatorLocations: {},
-                        solution: "BEAST"
+                        solution: "SORES"
+                    },
+                    {
+                        id: '9-across',
+                        number: 9,
+                        humanNumber: "9",
+                        clue: "Manner of speaking",
+                        direction: 'across',
+                        length: 4,
+                        group: ['9-across'],
+                        position: {x: 1, y: 4},
+                        separatorLocations: {},
+                        solution: "TONE"
                     },
                     {
                         id: '1-down',
                         number: 1,
                         humanNumber: '1',
-                        clue: 'Garden decoration',
+                        clue: 'Jar tops, or data structures used for managing load sources',
                         direction: 'down',
-                        length: 5,
+                        length: 4,
                         group: ['1-down'],
-                        position: { x: 1, y: 0 },
+                        position: { x: 0, y: 0 },
                         separatorLocations: {},
-                        solution: 'GNOME',
+                        solution: 'LIDS',
                     },
                     {
                         id: '2-down',
                         number: 2,
                         humanNumber: '2',
-                        clue: 'Birthplace of Google C.E.O. Sundar Pichai',
+                        clue: 'No exemplar of erudition',
                         direction: 'down',
                         length: 5,
                         group: ['2-down'],
-                        position: {x: 2, y: 0},
+                        position: {x: 1, y: 0},
                         separatorLocations: {},
-                        solution: 'INDIA'
+                        solution: 'IDIOT'
                     },
                     {
                         id: '3-down',
                         number: 3,
                         humanNumber: '3',
-                        clue: 'Speculate',
+                        clue: 'Paris subway',
                         direction: 'down',
                         length: 5,
                         group: ['3-down'],
-                        position: { x: 3, y: 0 },
+                        position: { x: 2, y: 0 },
                         separatorLocations: {},
-                        solution: 'GUESS',
+                        solution: 'METRO',
                     },
                     {
                         id: '4-down',
                         number: 4,
                         humanNumber: '4',
-                        clue: 'Part of U.A.E.',
+                        clue: 'Demolished',
                         direction: 'down',
-                        length: 4,
+                        length: 5,
                         group: ['4-down'],
-                        position: {x: 0, y: 1,},
+                        position: {x: 3, y: 0,},
                         separatorLocations: {},
-                        solution: 'ARAB',
+                        solution: 'EATEN',
                     },
                     {
                         id: '5-down',
                         number: 5,
                         humanNumber: '5',
-                        clue: 'Clueless',
+                        clue: 'Misplace',
                         direction: 'down',
                         length: 4,
                         group: ['5-down'],
                         position: {x: 4, y: 1},
                         separatorLocations: {},
-                        solution: "LOST"
+                        solution: "LOSE"
                     }
                 ],
                 solutionAvailable: true,
-                dateSolutionAvailable: 1772258400000,
+                dateSolutionAvailable: 1789189200000,
                 dimensions: {
                     cols: 5,
                     rows: 5,
@@ -146,39 +146,39 @@ export const CROSSWORD_DATA: CrosswordData = {
             },
             solution: [
                 [
-                    "",
-                    "A",
-                    "R",
-                    "A",
-                    "B"
-                ],
-                [
-                    "G",
-                    "N",
-                    "O",
-                    "M",
-                    "E"
+                    "L",
+                    "I",
+                    "D",
+                    "S",
+                    ""
                 ],
                 [
                     "I",
-                    "N",
                     "D",
                     "I",
-                    "A"
+                    "O",
+                    "T"
                 ],
                 [
-                    "G",
-                    "U",
+                    "M",
                     "E",
-                    "S",
-                    "S"
+                    "T",
+                    "R",
+                    "O"
+                ],
+                [
+                    "E",
+                    "A",
+                    "T",
+                    "E",
+                    "N"
                 ],
                 [
                     "",
                     "L",
                     "O",
                     "S",
-                    "T"
+                    "E"
                 ]
             ]
         }
