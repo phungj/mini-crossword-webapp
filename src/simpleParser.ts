@@ -26,13 +26,23 @@ type Clue = {
 // TAB
 //
 const GRID = `
-#####H####
-#####OCTAL
-MYFINGERS#
-#####BLEAK
-#####OLAPA
-#####M#T#N
-#####B####
+##############F#########
+##############R#########
+#############YIP########
+##############S#########
+##############B#########
+######BOOF####E#########
+#########L####E#########
+########PARKING#########
+####P####P####O#########
+####I####D#M##LOREREVIEW
+####C####O#I##F###U#####
+####K####O#N######G#####
+####L####D#I#U##########
+HAMMERSCHLAGEN##########
+A####Y###E#O#I##########
+LIMINAL##S#L#O##########
+F####N#####F#N##########
 `;
 
 // Put clues here using the crossword number.
@@ -41,21 +51,26 @@ MYFINGERS#
 // correspond to which entries.
 //
 const CLUES: Record<string, string> = {
-    '1-down': 'A 3740 disaster',
-    '2-across': 'The numerical system used to write every number within this puzzle\'s clues',
-    '3-down': 'Estimated to be around 664,435,325,760,000 of these in the human body (Singular)',
-    '4-down': 'Trick or',
-    '5-down': 'When Jon probably wanted these puzzles to be completed',
-    '6-across': 'Something one would declare to bite off whole hog mode (2 words)',
-    '7-across': 'How the chance of getting our share of GDP is looking this year',
-    '8-down': 'The three-letter abbreviation for the 42nd state',
-    '9-across': 'The goddess of the moon in Maasai mythology (practiced in Kenya and Tanzania) and a genus of moths found throughout Africa'
+    '1-down': 'ROH featuring JDD',
+    '2-across': 'The smallest a dog can be',
+    '3-across': 'The largest a dog can be',
+    '4-down': 'A safe default panic activity',
+    '5-across': '________ Lot Dip (a Midwest delicacy)',
+    '6-down': 'First ROH theme',
+    '7-down': 'Last July\'s ROH',
+    '8-across': 'Every August',
+    '9-down': 'Rob User Group',
+    '10-down': 'Surprise first ROH theme',
+    '11-across': 'This month\'s ROH',
+    '11-down': 'Splitting things in ____',
+    '12-down': 'Hunting ____ in the woods',
+    '13-across': 'Space with enforced quiet hours'
 };
 
-const TITLE = 'Emily\'s Mini Crossword';
-const CREATOR_NAME = 'Emily M.';
-const CREATOR_URL = 'https://emily-mcnett.github.io';
-const CROSSWORD_ID = 'crosswords/emily/1';
+const TITLE = 'Rob\'s Crossword';
+const CREATOR_NAME = 'Rob B.';
+const CREATOR_URL = 'https://github.com/RobertBerger5';
+const CROSSWORD_ID = 'crosswords/rob/1';
 
 //
 // ============================================================
@@ -149,13 +164,14 @@ function discoverEntries(
             }
 
             const startsAcross =
-                x === 0 ||
-                !isOpen(grid, x - 1, y);
+                (x === 0 || !isOpen(grid, x - 1, y)) &&
+                (x + 1 < cols && isOpen(grid, x + 1, y));
 
             const startsDown =
-                y === 0 ||
-                !isOpen(grid, x, y - 1);
+                (y === 0 || !isOpen(grid, x, y - 1)) &&
+                (y + 1 < rows && isOpen(grid, x, y + 1));
 
+            // This cell doesn't begin a real crossword entry.
             if (!startsAcross && !startsDown) {
                 continue;
             }
@@ -173,16 +189,13 @@ function discoverEntries(
                     solution += grid[y][cx];
                 }
 
-                // A one-cell word isn't normally an entry.
-                if (solution.length > 1) {
-                    entries.push({
-                        number,
-                        direction: 'across',
-                        x,
-                        y,
-                        solution,
-                    });
-                }
+                entries.push({
+                    number,
+                    direction: 'across',
+                    x,
+                    y,
+                    solution,
+                });
             }
 
             if (startsDown) {
@@ -196,15 +209,13 @@ function discoverEntries(
                     solution += grid[cy][x];
                 }
 
-                if (solution.length > 1) {
-                    entries.push({
-                        number,
-                        direction: 'down',
-                        x,
-                        y,
-                        solution,
-                    });
-                }
+                entries.push({
+                    number,
+                    direction: 'down',
+                    x,
+                    y,
+                    solution,
+                });
             }
         }
     }
@@ -297,20 +308,20 @@ function generate() {
             webUrl: CREATOR_URL,
         },
 
-        date: 1790830800000,
-        webPublicationDate: 1790830800000,
+        date: 1791435600000,
+        webPublicationDate: 1791435600000,
 
         entries: crosswordEntries,
 
         solutionAvailable: true,
-        dateSolutionAvailable: 1790830800000,
+        dateSolutionAvailable: 1791435600000,
 
         dimensions: {
-            cols: grid.length,
-            rows: grid[0].length,
+            cols: grid[0].length,
+            rows: grid.length,
         },
 
-        crosswordType: 'mini',
+        crosswordType: 'quick',
         pdf: 'https://crosswords-static.guim.co.uk/gdn.quick.20250221.pdf',
     };
 
@@ -329,7 +340,7 @@ function generate() {
         `${JSON.stringify(result, null, 2)};\n`;
 
     writeFileSync(
-        'emily.ts',
+        'rob.ts',
         output,
         'utf8'
     );
