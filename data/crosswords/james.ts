@@ -8,7 +8,7 @@ export const CROSSWORD_DATA: CrosswordData = {
         number: 1,
         name: 'A Friend\'s 5x5 Mini Crossword',
         creator: {
-          name: 'James, a friend of mine',
+          name: 'James L.',
           webUrl: '',
         },
         date: 1714453200000,

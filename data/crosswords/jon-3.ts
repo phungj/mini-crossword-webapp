@@ -18,7 +18,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         id: '1-across',
                         number: 1,
                         humanNumber: '1',
-                        clue: "Fruit slammed on Ryan's driveway",
+                        clue: "Fruit slammed in Ryan's kitchen",
                         direction: 'across',
                         length: 4,
                         group: ['1-across'],

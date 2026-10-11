@@ -81,7 +81,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                         clue: "'____ hurry, I'll help, or  '_ trance,' as hallucinated by AI (I know this clue isn't helpful, use the other one)",
                         direction: 'across',
                         length: 7,
-                        group: ['8-across'],
+                        group: ['10-across'],
                         position: {x: 0, y: 4},
                         separatorLocations: {},
                         solution: "ASIMINA"
@@ -208,7 +208,7 @@ export const CROSSWORD_DATA: CrosswordData = {
                     }
                 ],
                 solutionAvailable: true,
-                dateSolutionAvailable: 1790053200000,
+                dateSolutionAvailable: 179005320000100,
                 dimensions: {
                     cols: 7,
                     rows: 7,
